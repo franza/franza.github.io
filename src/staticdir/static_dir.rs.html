@@ -127,16 +127,27 @@
 <span id="85">85</span>
 <span id="86">86</span>
 <span id="87">87</span>
+<span id="88">88</span>
+<span id="89">89</span>
+<span id="90">90</span>
+<span id="91">91</span>
+<span id="92">92</span>
+<span id="93">93</span>
+<span id="94">94</span>
+<span id="95">95</span>
+<span id="96">96</span>
+<span id="97">97</span>
+<span id="98">98</span>
 </pre><pre class='rust '>
 <span class='kw'>use</span> <span class='ident'>iron</span>::{ <span class='ident'>Handler</span>, <span class='ident'>AfterMiddleware</span> };
 <span class='kw'>use</span> <span class='ident'>iron</span>::<span class='ident'>prelude</span>::<span class='op'>*</span>;
 <span class='kw'>use</span> <span class='ident'>iron</span>::<span class='ident'>status</span>::<span class='ident'>Status</span>;
 
-<span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>path</span>::{ <span class='ident'>PathBuf</span>, <span class='ident'>Path</span> };
+<span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>path</span>::{ <span class='ident'>PathBuf</span> };
 <span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>fs</span>::{ <span class='ident'>metadata</span>, <span class='ident'>read_dir</span>, <span class='ident'>ReadDir</span> };
 <span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>any</span>::<span class='ident'>Any</span>;
 
-<span class='kw'>use</span> <span class='ident'>errors</span>::{ <span class='ident'>NotADir</span>, <span class='ident'>io_to_iron</span> };
+<span class='kw'>use</span> <span class='ident'>errors</span>::{ <span class='ident'>io_to_iron</span> };
 
 <span class='kw'>use</span> <span class='ident'>url</span>::<span class='ident'>percent_encoding</span>::<span class='ident'>percent_decode</span>;
 
@@ -162,13 +173,15 @@
 }
 
 <span class='kw'>impl</span><span class='op'>&lt;</span><span class='ident'>T</span><span class='op'>&gt;</span> <span class='ident'>StaticDir</span><span class='op'>&lt;</span><span class='ident'>T</span><span class='op'>&gt;</span> <span class='kw'>where</span> <span class='ident'>T</span>: <span class='ident'>Send</span> <span class='op'>+</span> <span class='ident'>Sync</span> <span class='op'>+</span> <span class='ident'>Any</span> <span class='op'>+</span> <span class='ident'>ResponseStrategy</span> {
-    <span class='kw'>fn</span> <span class='ident'>provide_dir</span><span class='op'>&lt;</span><span class='ident'>P</span><span class='op'>&gt;</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>, <span class='ident'>path</span>: <span class='ident'>P</span>) <span class='op'>-&gt;</span> <span class='ident'>IronResult</span><span class='op'>&lt;</span><span class='ident'>Response</span><span class='op'>&gt;</span> <span class='kw'>where</span> <span class='ident'>P</span>: <span class='ident'>AsRef</span><span class='op'>&lt;</span><span class='ident'>Path</span><span class='op'>&gt;</span> {
+    <span class='kw'>fn</span> <span class='ident'>provide_dir</span><span class='op'>&lt;</span><span class='ident'>P</span><span class='op'>&gt;</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>, <span class='ident'>path</span>: <span class='ident'>P</span>) <span class='op'>-&gt;</span> <span class='ident'>IronResult</span><span class='op'>&lt;</span><span class='ident'>Response</span><span class='op'>&gt;</span> <span class='kw'>where</span> <span class='ident'>P</span>: <span class='ident'>Into</span><span class='op'>&lt;</span><span class='ident'>PathBuf</span><span class='op'>&gt;</span> {
+        <span class='kw'>let</span> <span class='ident'>path</span> <span class='op'>=</span> <span class='ident'>add_trailing_slash</span>(<span class='ident'>path</span>);
         <span class='ident'>metadata</span>(<span class='kw-2'>&amp;</span><span class='ident'>path</span>)
             .<span class='ident'>map_err</span>(<span class='ident'>io_to_iron</span>)
             .<span class='ident'>and_then</span>(<span class='op'>|</span><span class='ident'>meta</span><span class='op'>|</span> {
+                <span class='comment'>// trailing slash is added, so expecting only is_dir case</span>
                 <span class='kw'>match</span> <span class='ident'>meta</span>.<span class='ident'>is_dir</span>() {
                     <span class='boolval'>true</span>  <span class='op'>=&gt;</span> <span class='ident'>read_dir</span>(<span class='kw-2'>&amp;</span><span class='ident'>path</span>).<span class='ident'>map_err</span>(<span class='ident'>io_to_iron</span>),
-                    <span class='boolval'>false</span> <span class='op'>=&gt;</span> <span class='prelude-val'>Err</span>(<span class='ident'>IronError</span>::<span class='ident'>new</span>(<span class='ident'>NotADir</span>, <span class='ident'>Status</span>::<span class='ident'>BadRequest</span>)),
+                    <span class='boolval'>false</span> <span class='op'>=&gt;</span> <span class='macro'>unreachable</span><span class='macro'>!</span>(),
                 }
             })
             .<span class='ident'>and_then</span>(<span class='op'>|</span><span class='ident'>dir</span><span class='op'>|</span> <span class='self'>self</span>.<span class='ident'>response_strategy</span>.<span class='ident'>make_response</span>(<span class='ident'>dir</span>))
@@ -180,6 +193,15 @@
     <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>path</span> <span class='op'>=</span> <span class='ident'>root_path</span>.<span class='ident'>into</span>();
     <span class='kw'>let</span> <span class='ident'>decoded_req_path</span> <span class='op'>=</span> <span class='ident'>request</span>.<span class='ident'>url</span>.<span class='ident'>path</span>.<span class='ident'>iter</span>().<span class='ident'>map</span>(<span class='op'>|</span><span class='ident'>part</span><span class='op'>|</span> <span class='ident'>String</span>::<span class='ident'>from_utf8</span>(<span class='ident'>percent_decode</span>(<span class='ident'>part</span>.<span class='ident'>as_bytes</span>())).<span class='ident'>unwrap</span>());
     <span class='ident'>path</span>.<span class='ident'>extend</span>(<span class='ident'>decoded_req_path</span>);
+    <span class='ident'>path</span>
+}
+
+<span class='attribute'>#[<span class='ident'>inline</span>]</span>
+<span class='kw'>fn</span> <span class='ident'>add_trailing_slash</span><span class='op'>&lt;</span><span class='ident'>P</span><span class='op'>&gt;</span>(<span class='ident'>path</span>: <span class='ident'>P</span>) <span class='op'>-&gt;</span> <span class='ident'>PathBuf</span> <span class='kw'>where</span> <span class='ident'>P</span>: <span class='ident'>Into</span><span class='op'>&lt;</span><span class='ident'>PathBuf</span><span class='op'>&gt;</span> {
+    <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>path</span> <span class='op'>=</span> <span class='ident'>path</span>.<span class='ident'>into</span>();
+    <span class='comment'>// rust-url automatically turns an empty string in the last</span>
+    <span class='comment'>// slot in the path into a trailing slash.</span>
+    <span class='ident'>path</span>.<span class='ident'>push</span>(<span class='string'>&quot;&quot;</span>);
     <span class='ident'>path</span>
 }
 
