@@ -1,0 +1,1 @@
+initSidebarItems({"struct":[["StaticDir","An implementation of `Handler` which serves list of directory contents."]],"trait":[["ResponseStrategy","This trait is used by `StaticDir` to make a response from the collection of directory entries."]]});

@@ -1,0 +1,1 @@
+initSidebarItems({"fn":[["io_to_iron","Maps `std::io::Error` to `iron::prelude::IronError`."]],"struct":[["BadString","Generated when failed to convert `OsString` to `String`"],["NotADir","Generated when target entry is not a directory, i.e. a file or symlink."]]});

@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="rustdoc">
+    <meta name="description" content="API documentation for the Rust `AsJson` struct in crate `staticdir`.">
+    <meta name="keywords" content="rust, rustlang, rust-lang, AsJson">
+
+    <title>staticdir::AsJson - Rust</title>
+
+    <link rel="stylesheet" type="text/css" href="../main.css">
+
+    
+    
+</head>
+<body class="rustdoc">
+    <!--[if lte IE 8]>
+    <div class="warning">
+        This old browser is unsupported and will most likely display funky
+        things.
+    </div>
+    <![endif]-->
+
+    
+
+    <nav class="sidebar">
+        
+        <p class='location'><a href='index.html'>staticdir</a></p><script>window.sidebarCurrent = {name: 'AsJson', ty: 'struct', relpath: ''};</script><script defer src="sidebar-items.js"></script>
+    </nav>
+
+    <nav class="sub">
+        <form class="search-form js-only">
+            <div class="search-container">
+                <input class="search-input" name="search"
+                       autocomplete="off"
+                       placeholder="Click or press ‘S’ to search, ‘?’ for more options…"
+                       type="search">
+            </div>
+        </form>
+    </nav>
+
+    <section id='main' class="content struct">
+<h1 class='fqn'><span class='in-band'>Struct <a href='index.html'>staticdir</a>::<wbr><a class='struct' href=''>AsJson</a></span><span class='out-of-band'><span id='render-detail'>
+            <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
+                [<span class='inner'>&#x2212;</span>]
+            </a>
+        </span><a id='src-122' class='srclink' href='../src/staticdir/respond_with_dir.rs.html#47' title='goto source code'>[src]</a></span></h1>
+<pre class='rust struct'>pub struct AsJson;</pre><div class='docblock'><p>Provides list of directory contents in JSON format like</p>
+<pre class='rust rust-example-rendered'>
+ [
+   {
+     <span class='string'>&quot;file_type&quot;</span>: <span class='string'>&quot;File&quot;</span>, <span class='comment'>// &quot;File&quot;, &quot;Dir&quot; or &quot;Symlink&quot;</span>
+     <span class='string'>&quot;file_name&quot;</span>: <span class='string'>&quot;.gitignore&quot;</span>,
+     <span class='string'>&quot;size&quot;</span>: <span class='number'>7</span>,
+     <span class='string'>&quot;creation_time&quot;</span>: <span class='ident'>null</span>, <span class='comment'>// may be null on some Unix systems</span>
+     <span class='string'>&quot;last_modification_time&quot;</span>: <span class='number'>1451939290</span>,
+     <span class='string'>&quot;last_access_time&quot;</span>: <span class='number'>1451939309</span>
+   },
+   {
+     <span class='string'>&quot;file_type&quot;</span>: <span class='string'>&quot;File&quot;</span>,
+     <span class='string'>&quot;file_name&quot;</span>: <span class='string'>&quot;Cargo.toml&quot;</span>,
+     <span class='string'>&quot;size&quot;</span>: <span class='number'>196</span>,
+     <span class='string'>&quot;creation_time&quot;</span>: <span class='ident'>null</span>,
+     <span class='string'>&quot;last_modification_time&quot;</span>: <span class='number'>1451939547</span>,
+     <span class='string'>&quot;last_access_time&quot;</span>: <span class='number'>1451939547</span>
+   },
+   {
+     <span class='string'>&quot;file_type&quot;</span>: <span class='string'>&quot;Dir&quot;</span>,
+     <span class='string'>&quot;file_name&quot;</span>: <span class='string'>&quot;src&quot;</span>,
+     <span class='string'>&quot;size&quot;</span>: <span class='number'>4096</span>,
+     <span class='string'>&quot;creation_time&quot;</span>: <span class='ident'>null</span>,
+     <span class='string'>&quot;last_modification_time&quot;</span>: <span class='number'>1451939462</span>,
+     <span class='string'>&quot;last_access_time&quot;</span>: <span class='number'>1451939462</span>
+   }
+ ]</pre>
+
+<p>Current and parent directories (<code>.</code> and <code>..</code>) are not included.</p>
+</div><h2 id='implementations'>Trait Implementations</h2><h3 class='impl'><code>impl <a class='trait' href='../staticdir/trait.ResponseStrategy.html' title='staticdir::ResponseStrategy'>ResponseStrategy</a> for <a class='struct' href='../staticdir/struct.AsJson.html' title='staticdir::AsJson'>AsJson</a></code></h3><div class='docblock'><p>If failed to read metadata of a directory entry, such entry will not cause panic and will not be returned in resulting JSON</p>
+</div><div class='impl-items'><h4 id='method.make_response' class='method'><code>fn <a href='../staticdir/trait.ResponseStrategy.html#method.make_response' class='fnname'>make_response</a>(&amp;self, dir: <a class='struct' href='https://doc.rust-lang.org/nightly/std/fs/struct.ReadDir.html' title='std::fs::ReadDir'>ReadDir</a>) -&gt; <a class='type' href='../iron/type.IronResult.html' title='iron::IronResult'>IronResult</a>&lt;<a class='struct' href='../iron/response/struct.Response.html' title='iron::response::Response'>Response</a>&gt;</code></h4>
+</div></section>
+    <section id='search' class="content hidden"></section>
+
+    <section class="footer"></section>
+
+    <aside id="help" class="hidden">
+        <div>
+            <h1 class="hidden">Help</h1>
+
+            <div class="shortcuts">
+                <h2>Keyboard Shortcuts</h2>
+
+                <dl>
+                    <dt>?</dt>
+                    <dd>Show this help dialog</dd>
+                    <dt>S</dt>
+                    <dd>Focus the search field</dd>
+                    <dt>&larrb;</dt>
+                    <dd>Move up in search results</dd>
+                    <dt>&rarrb;</dt>
+                    <dd>Move down in search results</dd>
+                    <dt>&#9166;</dt>
+                    <dd>Go to active search result</dd>
+                </dl>
+            </div>
+
+            <div class="infos">
+                <h2>Search Tricks</h2>
+
+                <p>
+                    Prefix searches with a type followed by a colon (e.g.
+                    <code>fn:</code>) to restrict the search to a given type.
+                </p>
+
+                <p>
+                    Accepted types are: <code>fn</code>, <code>mod</code>,
+                    <code>struct</code>, <code>enum</code>,
+                    <code>trait</code>, <code>type</code>, <code>macro</code>,
+                    and <code>const</code>.
+                </p>
+
+                <p>
+                    Search functions by type signature (e.g.
+                    <code>vec -> usize</code>)
+                </p>
+            </div>
+        </div>
+    </aside>
+
+    
+
+    <script>
+        window.rootPath = "../";
+        window.currentCrate = "staticdir";
+        window.playgroundUrl = "";
+    </script>
+    <script src="../jquery.js"></script>
+    <script src="../main.js"></script>
+    
+    <script async src="../search-index.js"></script>
+</body>
+</html>
